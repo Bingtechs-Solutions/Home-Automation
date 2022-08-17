@@ -13,18 +13,25 @@ import android.webkit.WebViewClient;
 
 import com.bingtechs.portablewebcam.databinding.ActivityMainBinding;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding bind;
     PreferenceManager preferenceManager;
     int clickCounter = 1;
     private String url;
+    HashMap<String, String> header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bind = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(bind.getRoot());
+
+        header = new HashMap<>();
+
+        header.put("ngrok-skip-browser-warning", "ngrok-skip-browser-warning");
 
         preferenceManager = new PreferenceManager(this);
 
@@ -33,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
         bind.myToolbar.setTitle("");
         setSupportActionBar(bind.myToolbar);
 
-        bind.webView.loadUrl(url);
+        bind.webView.loadUrl(url, header);
+
+        bind.webView.getSettings().setJavaScriptEnabled(true);
 
         bind.webView.setWebViewClient(new WebViewClient(){
 
@@ -48,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 bind.progressBar.setVisibility(View.VISIBLE);
                 super.onPageStarted(view, url, favicon);
             }
+
 
         });
 
